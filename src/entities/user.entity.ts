@@ -1,5 +1,6 @@
-import { Exclude, Expose } from "class-transformer";
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import { Exclude, Expose, Transform } from "class-transformer";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import { Role } from "./role.entity";
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -48,4 +49,10 @@ export class User extends BaseEntity {
     get full_name(): string {
         return `${this.first_name} ${this.last_name}`
     }
+
+    @Transform(({value}) => value ? value.role_name : value)
+    @ManyToOne(() => Role, (role) => role.users)
+    @JoinColumn({ name: 'role_id' })
+    role: Role;
+
 }

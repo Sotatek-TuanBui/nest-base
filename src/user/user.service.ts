@@ -16,4 +16,13 @@ export class UserService extends BaseService<User, UserRepository> {
     {
         return this.repository.findOneBy({ email: email });
     }
+
+    findById(id: number): Promise<User> {
+        return this.repository.findOne({
+            relations: { role: true },
+            where: {
+                id
+            }
+        });
+    }
 }
